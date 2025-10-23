@@ -11,19 +11,16 @@ app.use("/authors", authorRouter);
 app.use("/books", bookRouter);
 app.use("/", indexRouter);
 
-app.use((req, res, next) => {
-   next(new Error("OH NO!"));
-});
+// app.use((req, res, next) => {
+//    next(new Error("OH NO!"));
+// });
 
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send(err);
+  console.error("Error caught:", err.name, "-", err.message);
+  res.status(err.statusCode || 500).send(err.message || "Internal Server Error");
 });
 
 const PORT = 3000;
-app.listen(PORT, (err) => {
-  if (err) {
-    throw err;
-  }
+app.listen(PORT, () => {
   console.log(`My first Express app - Server running at http://localhost:${PORT}`);
 });
